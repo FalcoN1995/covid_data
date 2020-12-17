@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    job: crawl-app
+  name: crawl-job
+  namespace: default
+spec:
+  template:
+    metadata:
+      name: crawl-job
+      labels:
+        job: crawl-app
+    spec:
+      containers:
+      - name: crawl-app
+        image: inhyok2003/test-repo:latest
+        imagePullPolicy: IfNotPresent
+        command: ["python3"]
+        args: ["crawl_snscraper.py", "covid", 3]
+      restartPolicy: OnFailure
+      volumes:
+      - name: hostpath-volume-create
+        hostPath:
+          path: "/tmp/hostpath"
+          type: DirectoryOrCreate
+      - name: hostpath-volume
+        hostPath:
+          path: "/tmp/hostpath"
+          type: Directory
